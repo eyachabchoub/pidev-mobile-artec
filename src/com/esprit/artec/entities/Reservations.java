@@ -17,10 +17,6 @@ public class Reservations {
     private boolean payer;
     String nomGalerie;
     String descriptionGalerie;
-    
-    String userFullName ;
-    String userEmail;
-    
 
     public String getNomGalerie() {
         return nomGalerie;

@@ -13,6 +13,7 @@ import com.codename1.ui.Toolbar;
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
+import com.esprit.artec.gui.EvenementsForm;
 import com.esprit.artec.gui.MesReservationsForm;
 
 /**
@@ -55,7 +56,8 @@ public class MyApplication {
         }
         //new WalkthruForm(theme).show();
         //new SignInForm(theme).show();
-        new MesReservationsForm(theme).show();
+        //new MesReservationsForm(theme).show();
+        new EvenementsForm(theme).show();
     }
 
     public void stop() {

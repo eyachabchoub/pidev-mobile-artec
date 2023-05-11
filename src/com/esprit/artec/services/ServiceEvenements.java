@@ -10,6 +10,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.util.Resources;
+import com.esprit.artec.entities.Evenements;
 import com.esprit.artec.entities.Reservations;
 import com.esprit.artec.utils.Statics;
 import java.util.ArrayList;
@@ -18,29 +19,29 @@ import org.json.JSONObject;
 
 /**
  *
- * @author eyach
+ * @author Asus
  */
-public class ServiceReservations {
+public class ServiceEvenements {
 
-    public static ServiceReservations instance = null;
+    public static ServiceEvenements instance = null;
 
     private ConnectionRequest req;
 
-    public static ServiceReservations getInstance() {
+    public static ServiceEvenements getInstance() {
         if (instance == null) {
-            instance = new ServiceReservations();
+            instance = new ServiceEvenements();
         }
         return instance;
     }
 
-    public ServiceReservations() {
+    public ServiceEvenements() {
         req = new ConnectionRequest();
 
     }
 
-    public ArrayList<Reservations> getMesReservations(Resources rs) {
-        ArrayList<Reservations> reservationsList = new ArrayList<>();
-        String url = Statics.BASE_URL + "/api/reservation/mes";
+    public ArrayList<Evenements> getEvenements(Resources rs) {
+        ArrayList<Evenements> evenementsList = new ArrayList<>();
+        String url = Statics.BASE_URL + "/api/evenement";
         req = new ConnectionRequest(url, false);
         req.setPost(false);
         req.addResponseListener((e) -> {
@@ -63,24 +64,25 @@ public class ServiceReservations {
 
                         if (obj instanceof JSONObject) {
                             JSONObject jsonObject = (JSONObject) obj;
-                            Reservations reservation = new Reservations();
-                            reservation.setIdRes(jsonObject.getInt("idRes"));
-                            reservation.setDate(jsonObject.getString("date"));
-                            reservation.setPrixr((float) jsonObject.getDouble("prixr"));
-                            reservation.setPayer(jsonObject.getBoolean("payer"));
-                            reservation.setNomGalerie(jsonObject.getJSONObject("idEvent").getString("nomGalerie"));
-                            reservation.setDescriptionGalerie(jsonObject.getJSONObject("idEvent").getString("descriptionGalerie"));
-                            reservationsList.add(reservation);
+                            Evenements evenement = new Evenements();
+                            evenement.setIdEvent(jsonObject.getInt("idEvent"));
+                            evenement.setNomGalerie(jsonObject.getString("nomGalerie"));
+                            evenement.setDescriptionGalerie(jsonObject.getString("descriptionGalerie"));
+                            evenement.setDateGal(jsonObject.getString("dateGal"));
+                            evenement.setPrix((int) (float) jsonObject.getDouble("prix"));
+                            evenement.setCategGal(jsonObject.getJSONArray("categGal").get(0).toString());
+
+                            evenementsList.add(evenement);
                         }
                         i++;
                     }
-                    // TODO: do something with the modelesList here
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(req);
-        return reservationsList;
+        return evenementsList;
     }
+
 }
