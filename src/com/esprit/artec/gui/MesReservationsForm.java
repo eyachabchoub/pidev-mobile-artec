@@ -85,14 +85,14 @@ public class MesReservationsForm extends BaseForm {
         ));
         for (Reservations resevation : mesReservationList) {
             //addModele(res.getImage(modele.getMgsrc()), modele.getNom(), modele.getPrix(), modele.getMarque());
-            addReservation(res.getImage("news-item-1.jpg"), resevation.getIdRes(), resevation.getDate(), resevation.getPrixr(), resevation.isPayer(), resevation.getNomGalerie(), resevation.getDescriptionGalerie());
+            addReservation(res.getImage("news-item-1.jpg"), resevation.getIdRes(), resevation.getDate(), resevation.getPrixr(), resevation.isPayer(), resevation.getNomGalerie(), resevation.getDescriptionGalerie(), res);
         }
         //  addModele(res.getImage("news-item-1.jpg"), "Série 3", 100, "BMW");
         //addModele(res.getImage("news-item-1.jpg"), "Série 3", 100, "BMW");
 
     }
 
-    private void addReservation(Image img, int idRes, String date, float prixr, boolean payer, String nomGalerie, String descriptionGalerie) {
+    private void addReservation(Image img, int idRes, String date, float prixr, boolean payer, String nomGalerie, String descriptionGalerie, Resources res) {
         int height = Display.getInstance().convertToPixels(20f);
         int width = Display.getInstance().convertToPixels(25f);
         Button image = new Button(img.fill(width, height));
@@ -143,6 +143,20 @@ public class MesReservationsForm extends BaseForm {
         cnt.add(BorderLayout.CENTER, infoContainer);
 
         add(cnt);
+
+        Button payerButton = new Button("Payer");
+        payerButton.addActionListener(e -> {
+            System.out.println("selected reservation: " + idRes);
+            new CoupantForm(idRes, res).show();
+        });
+        infoContainer.add(payerButton);
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.addActionListener(e -> {
+            System.out.println("selected reservation: " + idRes);
+            
+        });
+        infoContainer.add(deleteButton);
 
         image.addActionListener(e -> ToastBar.showMessage(nomGalerie, FontImage.MATERIAL_INFO));
     }

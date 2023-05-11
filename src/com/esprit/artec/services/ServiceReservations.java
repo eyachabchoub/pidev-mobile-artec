@@ -47,20 +47,14 @@ public class ServiceReservations {
             JSONParser j = new JSONParser();
             String json = new String(req.getResponseData()) + "";
             int statusCode = req.getResponseCode();
-            System.out.println("response code: " + statusCode);
-            System.out.println("json:" + json);
             try {
                 if (statusCode == 404) {
                     Dialog.show("Echec", "Error: 404 Not Found", "OK", null);
                 } else if (statusCode == 200) {
                     JSONArray jsonArray = new JSONArray(new JSONArray(json).get(0).toString());
-
-                    System.out.println("json Array: " + jsonArray);
                     int i = 0;
                     while (i < jsonArray.length()) {
                         Object obj = jsonArray.get(i);
-                        System.out.println("obj: " + obj);
-
                         if (obj instanceof JSONObject) {
                             JSONObject jsonObject = (JSONObject) obj;
                             Reservations reservation = new Reservations();
@@ -82,5 +76,34 @@ public class ServiceReservations {
         });
         NetworkManager.getInstance().addToQueueAndWait(req);
         return reservationsList;
+    }
+
+    public void participer(Resources rs) {
+        String url = Statics.BASE_URL + "/api/rating/add";
+        req = new ConnectionRequest(url, false);
+        req.addResponseListener((e) -> {
+            int statusCode = req.getResponseCode();
+            if (statusCode == 200) {
+                Dialog.show("Success", "Particer avec success", "OK", null);
+            } else {
+                Dialog.show("Error", "Failed", "OK", null);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+    }
+
+    public void verifierCoupannt(int idRes, String value, Resources rs) {
+        String url = Statics.BASE_URL + "/api/coupant/coupant/" + idRes+"?code="+value;
+        System.out.println("url: " + url);
+        req = new ConnectionRequest(url, false);
+        req.addResponseListener((e) -> {
+            int statusCode = req.getResponseCode();
+            if (statusCode == 200) {
+                Dialog.show("Success", "Coupant vérifié avec success", "OK", null);
+            } else {
+                Dialog.show("Error", "Failed", "OK", null);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
     }
 }
